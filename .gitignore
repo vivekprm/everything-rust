@@ -1,0 +1,7 @@
+.DS_Store
+rust-embedded/.DS_Store
+rust-data-engineering/target
+rust-fundamentals/target
+rust-embedded/target
+rust-github-demo/target
+rust-github-demo/hello-marco/target
