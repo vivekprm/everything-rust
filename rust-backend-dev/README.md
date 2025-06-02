@@ -309,4 +309,23 @@ we will be relying on our Continuous Integration pipeline to keep us in check th
 use this readymade template https://www.lpalmieri.com/posts/2020-06-06-zero-to-production-1-setup-toolchain-ides-ci/#5-2-ready-to-go-ci-pipelines
 
 ## Choosing a Web framework
+Check out [Choosing a Rust web framework, 2020 edition](https://www.lpalmieri.com/posts/2020-07-04-choosing-a-rust-web-framework-2020-edition/) for a deep-dive on actix-web, rocket, tide and warp.
+
+**active-web** should be our go-to web framework, it has a large and healthy community behind it and it runs 
+on **tokio**, therefore minimizing the likelihood of having to deal with incompatibilities/interop between
+different async runtimes.
+
+## Our First Endpoint: A Basic health_check
+Let's implement a basic ```/health_check``` endpoint: when we receive a GET request for ```/health_check```
+we want to return a **200 OK** response with no body.
+
+We can use health_check to verify that the application is up and ready to accept incoming requests.
+Combine it with a SAAS sevice like pingdom.com and you can be [alerted](https://www.pingdom.com/product/alerting/) 
+when your api goes dark - quite a good baseline for an email newsletter that you are running on the side.
+
+A health-check endpoint can also be handy if you are using a container orchestrator to juggle your
+application (e.g. Kubernetes or Nomad): the orchestrator can call ```/health_check``` to detect if the API
+has become unresponsive and trigger a restart.
+
+### Wiring Up Actix Web
 
