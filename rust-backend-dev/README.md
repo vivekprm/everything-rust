@@ -328,4 +328,102 @@ application (e.g. Kubernetes or Nomad): the orchestrator can call ```/health_che
 has become unresponsive and trigger a restart.
 
 ### Wiring Up Actix Web
+Our starting point will be the *Hello World!* example on actix-web's homepage.
+
+```rust
+use actix_web::{web, App, HttpRequest, HttpServer, Responder};
+
+async fn greet(req: HttpRequest) -> impl Responder {
+    let name = req.match_info().get("name").unwrap_or("World");
+    format!("Hello {}!", &name)
+}
+
+#[tokio::main]
+async fn main() -> std::io::Result<()> {
+    HttpServer::new(|| {
+        App::new()
+        .route("/", web::get().to(greet))
+        .route("/{name}", web::get().to(greet))
+    })
+    .bind("127.0.0.1:8000")?
+    .run()
+    .await
+}
+```
+
+A quick ```cargo check``` shows some errors. ```cargo check``` allows us to check if our code compiles or not without producing
+runnable binary. It runs the same checks that are run by ```cargo build```, but it doesn't bother to perform any machine code 
+generation.
+
+We have not added actix-web and tokio to our list of dependencies, therefore the compiler can't resolve what we imported.
+```toml
+[dependencies]
+actix-web = "4"
+tokio = { version = "1", features = ["macros", "rt-multi-thread"] }
+```
+
+under ```[dependencies]``` in our ```Cargo.toml``` or we can use cargo add to quickly add the latest version
+of both crates as a dependency of our project:
+
+```sh
+cargo add actix-web --vers 4.0.0
+```
+
+cargo add is not a default cargo command: it is provided by ```cargo-edit```, a community-maintained (cargo follows the same philosophy, 
+of Rust's standard library: where possible, the addition of new functionality is explored via third-party crates and then upstreamed 
+where it makes sense to do so (e.g. [cargo-vendor](https://github.com/alexcrichton/cargo-vendor))) cargo extension. 
+You can install it with:
+
+```sh
+cargo install cargo-edit
+```
+
+If you run ```cargo check``` again there should be no errors.
+
+You can now launch the application with ```cargo run``` and perform a quick manual test.
+
+```sh
+curl http://127.0.0.1:8000
+```
+
+#### Anatomy of An ```actix-web``` Application
+Let's have a closer look at our ```main.rs``` code.
+
+**Server - HttpServer** [HttpServer](https://docs.rs/actix-web/4.0.1/actix_web/struct.HttpServer.html) is the backbone supporting our
+application. It takes care of things like:
+- Where should the applicationbe listening for incoming requests? A TCP socket ```(e.g. 127.0.0.1:8000)?``` A Unix domain socket?
+- What is the maximum number of concurrent connections that we should allow? How many new connections per unit of time?
+- Should we enable Transport Layer Security (TLS)?
+- Etc.
+
+**HttpServer**, in other words, handles all *transport level* concerns.
+What happens afterwards? What does HttpServer do when it has established a new connection with a client of our API and we need to 
+start handling their requests?
+
+That is where **App** comes into play.
+
+**Application - App** [App](https://docs.rs/actix-web/4.0.1/actix_web/struct.App.html) is where all your application logic lives:
+routing, middlewares, request handlers, etc.
+App is the component whose job is to take an incoming request as input and spit out a response. Let's zoom in on our code snippet:
+
+```rust
+App::new()
+    .route("/", web::get().to(greet))
+    .route("/{name}", web::get().to(greet))
+```
+
+App is a practical example of the *builder pattern*: ```new()``` gives a clean slate to which we can add, one bit at a time, new behaviour
+using a fluent API (i.e. chaining method calls one after the other). We will cover the majority of App's API surface on a need-to-know
+basis.
+
+**Endpoint - Route** How do we add a new endpoint to our App?
+The [route](https://docs.rs/actix-web/4.0.1/actix_web/struct.App.html#method.route) method is probably the simplest way to go about
+doing it - it is used in a *Hello World!* example after all!
+
+**route** takes two parameters:
+- **path**, a string possibly templated (e.g. "/{name}") to accomodate dynamic path segments;
+- **route**, an instance of the **Route** struct
+
+[Route](https://docs.rs/actix-web/4.0.1/actix_web/struct.Route.html) combines a *handler* with a set of guards.
+
 
