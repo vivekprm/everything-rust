@@ -249,3 +249,56 @@ mod tests {
     }
 }
 ```
+
+## Neural Network
+Let's program our neural network. 
+
+```rust
+pub struct Network {
+    layers:Vec<usize>,
+    weights: Vec<Matrix>,
+    biases: Vec<Matrix>,
+    data: Vec<Matrix>,
+    activation: Activation,
+    learning_rate: f64,
+}
+
+pub struct Activation {
+    pub function: fn(&f64) -> f64,
+    pub derivative: fn(&f64) -> f64,
+}
+```
+
+This is our network data strcuture. The layers are represented as a vector of the amount of neurons per layer. Weights, biases and inputs
+are stored as a vector of type Matrix and finally we have got our activation function and learning rate.
+
+Let's add a function to initialize our network.
+
+```rust
+use crate::activations::Activation;
+use matrix::matrix::Matrix;
+
+impl Network {
+    pub fn new(layers: Vec<usize>, activation: Activation, learning_rate: f64) -> Self {
+        let mut weights = vec![];
+        let mut biases = vec![];
+
+        for i in 0..layers.len() - 1 {
+            weights.push(Matrix::random(layers[i + 1], layers[i]));
+            biases.push(Matrix::random(layers[i + 1], 1));
+        }
+
+        Network {
+            layers,
+            weights,
+            biases,
+            data: vec![],
+            activation,
+            learning_rate,
+        }
+    }
+}
+```
+
+Now that we have implemented our neural network. Let's implement feed forward function. **Feed Forward** was a process of computing the output
+or prediction from the input data by propagating it forward through the network layers.

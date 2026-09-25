@@ -1,7 +1,7 @@
 use rand::{Rng, RngExt};
 use std::fmt;
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Matrix {
     pub rows: usize,
     pub cols: usize,
@@ -115,6 +115,45 @@ impl Matrix {
             rows: self.rows,
             cols: other.cols,
             data: result_data,
+        }
+    }
+
+    pub fn map(&mut self, func: fn(&f64) -> f64) -> Matrix {
+        let mut result = Matrix {
+            rows: self.rows,
+            cols: self.cols,
+            data: Vec::with_capacity(self.data.len()),
+        };
+
+        result.data.extend(self.data.iter().map(|&val| func(&val)));
+        result
+    }
+
+    pub fn transpose(&self) -> Matrix {
+        let mut buffer = vec![0.0; self.cols * self.rows];
+
+        for i in 0..self.rows {
+            for j in 0..self.cols {
+                buffer[j * self.rows + i] = self.data[i * self.cols + j];
+            }
+        }
+
+        Matrix {
+            rows: self.cols,
+            cols: self.rows,
+            data: buffer,
+        }
+    }
+}
+
+impl From<Vec<f64>> for Matrix {
+    fn from(vec: Vec<f64>) -> Self {
+        let rows = vec.len();
+        let cols = 1;
+        Matrix {
+            rows,
+            cols,
+            data: vec,
         }
     }
 }
