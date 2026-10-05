@@ -1,7 +1,10 @@
 .DS_Store
+.agents
 rust-embedded/.DS_Store
 rust-data-engineering/target
 rust-fundamentals/target
 rust-embedded/target
 rust-github-demo/target
 rust-github-demo/hello-marco/target
+rust-cli/hello-ratatui/target
+skills-lock.json
