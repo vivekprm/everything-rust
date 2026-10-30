@@ -104,4 +104,72 @@ waiting for the results to return. Once the database result return then the Task
 point it will be back on the **run queue**. In the meantime **Processor** can continue executing other tasks.
 
 # Creating Threads
+To create a thread in Rust we use `spawn` function. `spawn` takes a closure containing the code which will run in the new thread. 
+First lets import `thread` from standard library.
 
+```rust
+use std::thread;
+
+fn main() {
+    thread::spawn(|| {
+        for i in 0..20 {
+            println!("Spawned thread: {i}");
+        }        
+    });
+    for i in 0..10 {
+        println!("Main thread: {i}");
+    }
+}
+```
+
+If we run it, we see that loop in our main thread executed till completion, however loop in spawn thread did not. We can see 
+different result if we run it again. This is because as soon as our main thread ends program is terminated. What we want is, 
+main thread to wait till the spawned thread is finished. To do this we can use `JoinHandle`.
+
+If you look at the return value of `spawn` function, it returns `JoinHandle`. A **JoinHandle** is an owned value with a method
+called `Join` which when called will block the current thread from executing until the thread represented by `JoinHandle` terminates.
+
+```rust
+use std::thread;
+
+fn main() {
+    let handle = thread::spawn(|| {
+        for i in 0..20 {
+            println!("Spawned thread: {i}");
+        }        
+    });
+    for i in 0..10 {
+        println!("Main thread: {i}");
+    }
+
+    handle.join().unwrap();
+}
+```
+
+`join` method returns a `Result` type which could be an error if the associated thread panics. We are calling `unwrap`, so if the
+spawned thread panics main thread will panic as well.
+
+This time loop in the main thread finished and loop in the spawned thread finished as well. You might see different result on your
+computer. On my computer looks like main thread and then spawned thread executed sequentially. However it's upto the operating 
+system how to run them and we might see different outputs.
+
+We can force threads to stop executing for a given amount of time using the `sleep` function.
+
+```rust
+use std::{thread, time::Duration};
+
+fn main() {
+    let handle = thread::spawn(|| {
+        for i in 0..20 {
+            println!("Spawned thread: {i}");
+            thread::sleep(Duration::from_millis(1));
+        }        
+    });
+    for i in 0..10 {
+        println!("Main thread: {i}");
+        thread::sleep(Duration::from_millis(1));
+    }
+
+    handle.join().unwrap();
+}
+```
