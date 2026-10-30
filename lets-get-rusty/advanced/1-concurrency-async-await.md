@@ -1,6 +1,6 @@
 # How programs are executed.
 
-pic
+<img width="1697" height="965" alt="Screenshot 2026-10-30 at 10 11 55 AM" src="https://github.com/user-attachments/assets/933a3d71-7cda-46f4-82d5-c08253300b85" />
 
 Your program is stored on local disk and when it's executed, a process is created in RAM. A `process` is an instance of your computer program
 being executed. Typically you have one process for your program. Some programs however will have multiple processes. E.g. a web browser might
@@ -36,7 +36,7 @@ cores then multiple threads could be executed in parallel. So if the CPU has 4 c
         - **Time Slicing**: Execution of these parts in **interleaved** on a single core.
         - **Parallel Execution**: Execution of these parts **happens at the same time** using **multiple cores**.
 
-pic
+<img width="1688" height="952" alt="Screenshot 2026-10-30 at 10 55 21 AM" src="https://github.com/user-attachments/assets/92e46bc4-a287-47e4-af7b-8e4ee9c8e8ed" />
 
 On the left we have diagram of time slicing with two threads. As time goes on each thread gets little bit of time to execute. But because
 only one thread could execute at a given time execution have to be **interleaved**.
@@ -84,7 +84,7 @@ the correct concurrency model at the beginning of the development cycle.
 
 Let's see how both of these models relate to each other through visual diagram
 
-pic
+<img width="1413" height="883" alt="Screenshot 2026-10-30 at 12 03 40 PM" src="https://github.com/user-attachments/assets/d0415096-44f5-4eb7-919a-b8260652a002" />
 
 There are different ways an **Async Runtime** could be implemented. This is one common way.
 
@@ -94,7 +94,7 @@ The **Green Boxes** represent many **Async Tasks**, which maps to a few **OS thr
 The underlying concept is same. Let's now dig deep into, how these **OS Threads** in the **Thread Pool** execute tasks.
 
 # Task Scheduler/Executor
-pic
+<img width="1725" height="735" alt="Screenshot 2026-10-30 at 12 08 35 PM" src="https://github.com/user-attachments/assets/391b8de8-9083-4977-ad3e-242be9f824d0" />
 
 Inside the Thread we have something called a **Scheduler or Executor**, now implementations may vary but here is the very simple example.
 
