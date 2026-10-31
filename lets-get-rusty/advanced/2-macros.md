@@ -73,16 +73,14 @@ Looking at the code to the left we can see that it contains a `macro` the `print
 
 This `macro` will be identified as a node in the `Abstract Syntax Tree` and then be expanded into regular rust code.
 
-<img width="843" height="430" alt="Screenshot 2026-10-31 at 10 05 46 PM" src="https://github.com/user-attachments/assets/64ae095b-d093-45d7-8605-58bfa8cdcd9c" />
-
 After all `macros` are expanded `Semantic Analysis` checks to make sure that `Abstract Syntax Tree` semantically makes sense.
 
-pic3
+<img width="843" height="430" alt="Screenshot 2026-10-31 at 10 05 46 PM" src="https://github.com/user-attachments/assets/64ae095b-d093-45d7-8605-58bfa8cdcd9c" />
 
 In this case, AST is semantically correct. However, Imagine if we implemented `Animal` for a type that didn't exist e.g. `xzy`, in this case
 our tree is structurally correct but semantically it doesn't make sense.
 
-![Uploading Screenshot 2026-10-31 at 10.07.15 PM.png…]()
+<img width="836" height="426" alt="Screenshot 2026-10-31 at 10 07 15 PM" src="https://github.com/user-attachments/assets/82a96d75-0048-4208-a774-25218d0a1ebc" />
 
 In summary, we learned that `macros` are a way of writing code that writes other code and they are expanded or processed at compile time.
 Specifically, macros are expanded after the `Abstract Syntax Tree` is constructed but before it gets validated by `Semantic Analysis`.
