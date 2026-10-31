@@ -13,7 +13,7 @@ Cons:
 - Also because `macros` are processed at compile time they can increase compile time.
 
 # How Compilation Works
-
+```
 Source
 Code
   |
@@ -23,7 +23,7 @@ Lexical Analysis -> Syntax Analysis -> Semantic Analysis -> Intermediate Code Ge
                                                                                                                             |
                                                                                                                             v
                                                                                                                           Binary
-
+```
 For the macros, we will focus on first three stages of compilation process.
 
 ## Lexical Analysis
