@@ -1,0 +1,88 @@
+# Macros
+Macros are also called `Syntax Extensions`. Or a way of writing code that writes other code. This is a form of **meta-programming**. Macros
+are expanded at compile time.
+
+Before diving into the details, let's look at the pros and cons.
+
+Pros:
+- On the upside `macros` help reduce the amount of code you have to write and maintain.
+- Allow us to extend the syntax of the language.
+
+Cons:
+- Macros can be difficult to read, understand, debug and maintain.
+- Also because `macros` are processed at compile time they can increase compile time.
+
+# How Compilation Works
+
+Source
+Code
+  |
+  v
+
+Lexical Analysis -> Syntax Analysis -> Semantic Analysis -> Intermediate Code Generation -> Code Optimization -> Target Code Generation
+                                                                                                                            |
+                                                                                                                            v
+                                                                                                                          Binary
+
+For the macros, we will focus on first three stages of compilation process.
+
+## Lexical Analysis
+
+pic
+
+From the perspective of compiler, your source code starts of as a meaningless text file. The Job of `Lexical Analysis` is to turn this
+meaningless text into a stream of tokens and then classify the tokens. **Tokens** are indivisible lexical units. Think about them as 
+words a language understands. And they can be grouped into several categories. Such as:
+
+- Identifiers
+- Literals
+- Keywords
+- Symbols
+
+In above example, `impl`, `for` and `fn` are all `Keywords`. `Animal`, `Dog` and `speak` are all `Identifiers`. 
+The string "woof!" is a `Literal` and `{`, `(` and `&` are all `Symbols`.
+
+Note that in this stage of compilation process tokens have been identified but no meaning have been attached to them.
+
+Once tokens are identified and categorized they could be used by tools such as syntax highlighters which we can see in the example to the right.
+
+Stream of tokens is then turned into a stream of token trees. Almost all tokens are token trees themselves, specifically leaf nodes. The only
+non-leaf nodes are grouping tokens such as parantheses, brackets or curly braces. 
+
+pic
+
+In this example `impl`, `Animal`, `for` and `Dog` are all `token trees` with one leaf node. The `{}` are a root node in a token tree containing
+`fn`, `speak`, `()` and `{}`.
+
+`Macros` in Rust deal with tokens and token trees. So it's important to understand these two concepts.
+
+Next thing in the compilation process is, `Syntax Analysis`, which turns a `Stream of token trees` into an `Abstract Syntax Tree`.
+
+pic
+
+The `Abstract Syntax Tree` represents the syntax structure of your program. The `nodes` in this syntax tree could be `literals`, `functioncalls`
+`if else branches` and more. Using the `Abstract Syntax Tree` programs like `linters`, `test coverage tools` and `transpilers` are implemented.
+
+In Rust, `macros` are processed or expanded, after the `Abstract Syntax Tree` is constructed but prior to `Semantic Analysis`.
+
+pic
+
+Looking at the code to the left we can see that it contains a `macro` the `println!` macro. 
+
+pic1
+
+This `macro` will be identified as a node in the `Abstract Syntax Tree` and then be expanded into regular rust code.
+
+pic2
+
+After all `macros` are expanded `Semantic Analysis` checks to make sure that `Abstract Syntax Tree` semantically makes sense.
+
+pic3
+
+In this case, AST is semantically correct. However, Imagine if we implemented `Animal` for a type that didn't exist e.g. `xzy`, in this case
+our tree is structurally correct but semantically it doesn't make sense.
+
+pic
+
+In summary, we learned that `macros` are a way of writing code that writes other code and they are expanded or processed at compile time.
+Specifically, macros are expanded after the `Abstract Syntax Tree` is constructed but before it gets validated by `Semantic Analysis`.
