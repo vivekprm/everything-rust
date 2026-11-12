@@ -41,6 +41,19 @@ UTF-8 a character can be in range on 1 byte to 4 byte. This means that UTF-8 sta
 
 What's even better is that UTF-8 is backward compatible with ASCII. 
 
+In Linux command line we can use below commands to convert octal, hexadecimal & decimal into character.
+
+```sh
+printf "\141\n"
+printf "\x142\n"
+printf "\\$(printf "%o" 72)\\n"
+```
+
+Use below man pages to get the list of ascii characters.
+```sh
+man 7 ascii
+```
+
 # Let's look at how UTF-8 encodes text
 The first byte tells us how many bytes a character takes up. E.g. 
 
