@@ -90,6 +90,22 @@ So this character takes up 4 bytes because it starts with 11110.
 
 UTF-8 is the encoding used in Rust.
 
+In linux terminal to convert a utf-8 code into char:
+```sh
+echo -e '\xe2\x82\xac'
+```
+or
+```sh
+printf '\xe2\x82\xac\n'
+```
+
+To convert unicode into char:
+
+```sh
+printf '\u20ac\n'
+printf '\U0001f680\n'
+```
+
 Now let's talk about Rust specific concepts.
 
 There are two different types of strings in Rust:
