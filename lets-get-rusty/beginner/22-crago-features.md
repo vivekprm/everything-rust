@@ -4,6 +4,7 @@ We have a Cargo project called Draw with a single library crate.
 
 This single library has one public top level function called draw_line. It also has two modules color & shapes.
 
+```toml
 [package]
 name = "draw"
 version = "0.1.0"
@@ -16,6 +17,7 @@ rgb = { version = "0.8.25", features = ["serde"] }
 [features]
 color = []
 shapes = []
+```
 
 Here we use `serde` to be able to serialize and deserialize the Rectangle struct. Now this library is very small.
 But imagine it was lot bigger, we don't want consumers of the library to pay for the behaviour that they don't use.
