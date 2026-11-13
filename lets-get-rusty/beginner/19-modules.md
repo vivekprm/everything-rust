@@ -73,7 +73,11 @@ cargo install cargo-modules
 
 Then to visualize cargo module tree run:
 ```sh
-cargo modules generate tree 
+cargo modules generate tree
+```
+In new versions of rust it is:
+```sh
+cargo modules structure --verbose
 ```
 
 Currently we have only one module called crate. crate module is the root of our module tree and it's automatically
